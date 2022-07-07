@@ -16,13 +16,14 @@ import com.example.offerwalltest.utils.drawableSVG.SvgSoftwareLayerSetter
 import java.io.InputStream
 
 
-/*fun ImageView.loadImage(src: String) {
+fun ImageView.loadImage(src: String) {
     Glide.with(context)
         .load(src)
-        .diskCacheStrategy(DiskCacheStrategy.NONE)
-        .apply(RequestOptions().error(R.drawable.bg_btn).also { println("error: ${it.errorId}") })
+        .diskCacheStrategy(DiskCacheStrategy.NONE) //none because add not often repeated
+        .animate(android.R.anim.fade_in)
+        .error(R.drawable.bg_btn)
         .into(this)
-}*/
+}
 
 fun ImageView.loadSVG(activity: Activity, src: String) {
 
@@ -40,7 +41,7 @@ fun ImageView.loadSVG(activity: Activity, src: String) {
 
     val uri: Uri = Uri.parse(src)
     requestBuilder
-        .diskCacheStrategy(DiskCacheStrategy.SOURCE) // SVG cannot be serialized so it's not worth to cache it
+        .diskCacheStrategy(DiskCacheStrategy.NONE) // SVG cannot be serialized so it's not worth to cache it
         .load(uri)
         .into(this)
 }

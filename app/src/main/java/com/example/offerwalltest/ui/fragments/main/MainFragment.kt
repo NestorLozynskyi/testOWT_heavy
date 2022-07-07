@@ -65,7 +65,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::clas
                         web.gone()
                         image.visible()
                         it.url?.let {url ->
-                            image.loadSVG(requireActivity(), url)
+                            when(url.split(".").last()){
+                                "svg" -> {
+                                    image.loadSVG(requireActivity(), url)
+                                }
+                                else -> {
+                                    try {
+                                        image.loadImage(url)
+                                    } catch (e: Exception){}
+                                }
+                            }
+
                         }
                     }
                     "game" -> {

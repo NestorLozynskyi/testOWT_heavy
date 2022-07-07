@@ -63,11 +63,10 @@ dependencies {
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:3.6.0'
-    //annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    //implementation2 'com.github.bumptech.glide:glide:4.13.2'
+    //implementation 'com.github.bumptech.glide:glide:4.13.2'
 
     implementation 'com.caverock:androidsvg:1.2.1'
-
-    //implementation 'com.github.ar-android:AndroidSvgLoader:1.0.0'
 
     // CHUCK
     /*debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'*/
