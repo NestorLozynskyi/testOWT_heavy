@@ -7,20 +7,24 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.StreamEncoder
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.resource.file.FileToStreamDecoder
+import com.caverock.androidsvg.SVG
 import com.example.offerwalltest.R
+import com.example.offerwalltest.utils.drawableSVG.SvgDecoder
+import com.example.offerwalltest.utils.drawableSVG.SvgDrawableTranscoder
+import com.example.offerwalltest.utils.drawableSVG.SvgSoftwareLayerSetter
 import java.io.InputStream
 
 
-fun ImageView.loadImage(src: String) {
+/*fun ImageView.loadImage(src: String) {
     Glide.with(context)
         .load(src)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .apply(RequestOptions().error(R.drawable.bg_btn))
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
+        .apply(RequestOptions().error(R.drawable.bg_btn).also { println("error: ${it.errorId}") })
         .into(this)
-}
+}*/
 
-/*fun ImageView.loadVector(activity: Activity, src: String){
+fun ImageView.loadSVG(activity: Activity, src: String) {
 
     val requestBuilder = Glide.with(activity)
         .using(Glide.buildStreamModelLoader(Uri::class.java, activity), InputStream::class.java)
@@ -28,17 +32,15 @@ fun ImageView.loadImage(src: String) {
         .`as`(SVG::class.java)
         .transcode(SvgDrawableTranscoder(), PictureDrawable::class.java)
         .sourceEncoder(StreamEncoder())
-        .cacheDecoder(FileToStreamDecoder<SVG>(SvgDecoder()))
+        .cacheDecoder(FileToStreamDecoder(SvgDecoder()))
         .decoder(SvgDecoder())
-        .placeholder(R.drawable.ic_facebook)
-        .error(R.drawable.ic_web)
+        .error(R.drawable.bg_btn)
         .animate(android.R.anim.fade_in)
-        .listener(SvgSoftwareLayerSetter<Uri>())
+        .listener(SvgSoftwareLayerSetter())
 
-    val uri: Uri =
-        Uri.parse("https://de.wikipedia.org/wiki/Scalable_Vector_Graphics#/media/File:SVG_logo.svg")
+    val uri: Uri = Uri.parse(src)
     requestBuilder
         .diskCacheStrategy(DiskCacheStrategy.SOURCE) // SVG cannot be serialized so it's not worth to cache it
         .load(uri)
-        .into(mImageView)
-}*/
+        .into(this)
+}

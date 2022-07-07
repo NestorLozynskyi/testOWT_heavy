@@ -15,13 +15,16 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     private var itemJob: Job? = null
 
     init {
+        getIds()
+    }
+
+    fun getIds(){
         if (idsJob != null) {
             cancel()
         }
         idsJob = launch({
             ldIds.postValue(repository.getIdsList())
         },{})
-
     }
 
     fun getItem(i: Int){

@@ -3,12 +3,10 @@ package com.example.offerwalltest.ui.fragments.main
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebSettings
-import androidx.core.net.toUri
 import com.example.offerwalltest.base.BaseFragment
 import com.example.offerwalltest.data.response.IdsObjData
 import com.example.offerwalltest.databinding.FragmentMainBinding
 import com.example.offerwalltest.utils.extensions.*
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::class.java) {
@@ -22,14 +20,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::clas
         super.onViewCreated(view, savedInstanceState)
         observe()
         binding.next.setOnClickListener {
-            if (ids.isNotEmpty())
+            if (ids.isNotEmpty()){
                 currentItem++
                 if (ids.size > currentItem){
                     viewModel.getItem(ids[currentItem].id)
                 } else {
                     currentItem = 0
-                    viewModel.getItem(ids[currentItem].id)
+                    viewModel.getItem(ids[0].id)
                 }
+            } else {
+                viewModel.getIds()
+            }
         }
         val webSettings: WebSettings = binding.web.settings
         webSettings.javaScriptEnabled = true
@@ -38,7 +39,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::clas
     private fun observe() {
         observeLiveData(viewModel.ldIds){
             ids = it!!.data
-            ids[0].let{ i -> viewModel.getItem(i.id) }
+            try {
+                viewModel.getItem(ids[currentItem].id)
+            } catch (e: Exception) {
+                ids[0].let { i -> viewModel.getItem(i.id) }
+            }
         }
         observeLiveData(viewModel.ldItem){
             with(binding) {
@@ -56,18 +61,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::clas
                         it.url?.let { url -> web.loadUrl(url) }
                     }
                     "image" -> {
-                        /*text.gone()
+                        text.gone()
                         web.gone()
                         image.visible()
-                        it.url?.let {url ->*/
-                            //image.loadVector(requireActivity(), url)
-                            /*image.setImageURI(url.toUri())
-                            image.loadImage(url)*/
-                        //}
-                        text.gone()
-                        web.visible()
-                        image.gone()
-                        it.url?.let { url -> web.loadUrl(url) }
+                        it.url?.let {url ->
+                            image.loadSVG(requireActivity(), url)
+                        }
                     }
                     "game" -> {
                         text.gone()
